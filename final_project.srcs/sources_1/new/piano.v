@@ -54,15 +54,15 @@ module rate_control(btnU, btnL, rate, rst, clk);
 
     always @* begin
         next_rate = rate;
-        if(btnU==1'b1 && rate!=16'h0128) begin
+        if(btnU==1'b1 && rate!=16'h0218) begin
             next_rate = rate + 1;
             if(rate[3:0]==4'h9) next_rate = rate + 7;
-            if(rate[7:0]==8'h99) next_rate = rate + 87;
+            if(rate[7:0]==8'h99) next_rate = rate + 103;
         end
         if(btnL==1'b1 && rate!=16'h0040) begin
             next_rate = rate - 1;
             if(rate[3:0]==4'h0) next_rate = rate - 7;
-            if(rate[11:0]==12'h100) next_rate = rate - 87;
+            if(rate[7:0]==12'h00) next_rate = rate - 103;
         end
     end
 
@@ -92,7 +92,7 @@ module metronome(rst, clk, rate, LED);
 
     always @* begin
         next_dir = dir;
-        if(cnt==(400_000_000/real_rate)-1) begin
+        if(cnt>=(400_000_000/real_rate)-1) begin
             next_cnt = 34'b0;
             if(dir==1'b0) begin
                 next_LED = LED << 1;
