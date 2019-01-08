@@ -1,3 +1,83 @@
+`define KEY_1 10'h016
+`define KEY_2 10'h01E
+`define KEY_3 10'h026
+`define KEY_4 10'h025
+`define KEY_5 10'h02E
+`define KEY_6 10'h036
+`define KEY_7 10'h03D
+`define KEY_8 10'h03E
+`define KEY_9 10'h046
+`define KEY_0 10'h045
+`define KEY_Q 10'h015
+`define KEY_W 10'h01D
+`define KEY_E 10'h024
+`define KEY_R 10'h02D
+`define KEY_T 10'h02C
+`define KEY_Y 10'h035
+`define KEY_U 10'h03C
+`define KEY_I 10'h043
+`define KEY_O 10'h044
+`define KEY_P 10'h04D
+`define KEY_A 10'h01C
+`define KEY_S 10'h01B
+`define KEY_D 10'h023
+`define KEY_F 10'h02B
+`define KEY_G 10'h034
+`define KEY_H 10'h033
+`define KEY_J 10'h03B
+`define KEY_K 10'h042
+`define KEY_L 10'h043
+`define KEY_Z 10'h01A
+`define KEY_X 10'h022
+`define KEY_C 10'h021
+`define KEY_V 10'h02A
+`define KEY_B 10'h032
+`define KEY_N 10'h031
+`define KEY_M 10'h03A
+`define KEY_, 10'h041
+`define KEY_. 10'h049
+
+`define KEY_1R 10'h116
+`define KEY_2R 10'h11E
+`define KEY_3R 10'h126
+`define KEY_4R 10'h125
+`define KEY_5R 10'h12E
+`define KEY_6R 10'h136
+`define KEY_7R 10'h13D
+`define KEY_8R 10'h13E
+`define KEY_9R 10'h146
+`define KEY_0R 10'h145
+`define KEY_QR 10'h115
+`define KEY_WR 10'h11D
+`define KEY_ER 10'h124
+`define KEY_RR 10'h12D
+`define KEY_TR 10'h12C
+`define KEY_YR 10'h135
+`define KEY_UR 10'h13C
+`define KEY_IR 10'h143
+`define KEY_OR 10'h144
+`define KEY_PR 10'h14D
+`define KEY_AR 10'h11C
+`define KEY_SR 10'h11B
+`define KEY_DR 10'h123
+`define KEY_FR 10'h12B
+`define KEY_GR 10'h134
+`define KEY_HR 10'h133
+`define KEY_JR 10'h13B
+`define KEY_KR 10'h142
+`define KEY_LR 10'h143
+`define KEY_ZR 10'h11A
+`define KEY_XR 10'h122
+`define KEY_CR 10'h121
+`define KEY_VR 10'h12A
+`define KEY_BR 10'h132
+`define KEY_NR 10'h131
+`define KEY_MR 10'h13A
+`define KEY_,R 10'h141
+`define KEY_.R 10'h149
+
+
+
 module SampleDisplay(
 	output wire [6:0] display,
 	output wire [3:0] digit,
@@ -39,7 +119,7 @@ module SampleDisplay(
 	
 	wire shift_down;
 	wire [511:0] key_down;
-	wire [8:0] last_change;
+	wire [9:0] last_change;
 	wire been_ready;
 	
 	assign shift_down = (key_down[LEFT_SHIFT_CODES] == 1'b1 || key_down[RIGHT_SHIFT_CODES] == 1'b1) ? 1'b1 : 1'b0;

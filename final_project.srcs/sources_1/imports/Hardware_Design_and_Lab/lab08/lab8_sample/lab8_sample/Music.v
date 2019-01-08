@@ -18,190 +18,186 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-`define NMCss  32'd1047 // C sharp sharp
-`define NMDss  32'd1175 // D sharp sharp
-`define NMEss  32'd1319 // E sharp sharp
-`define NMCs  32'd524 // C sharp
-`define NMDs  32'd588 // D sharp
-`define NMEs  32'd660 // E sharp
-`define NMFs  32'd698 // F sharp
-`define NMGs  32'd784 // G sharp
-`define NMAs  32'd880 // A sharp
-`define NMBs  32'd988 // B sharp
-`define NMC   32'd262 // C
-`define NMD   32'd294 // D
-`define NME   32'd330 // E
-`define NMF   32'd349 // F
-`define NMG   32'd392 // G
-`define NMA   32'd440 // A
-`define NMB   32'd494 // B
-`define NM0   32'd50000 //slience (over freq.)
+`define M0  32'd50000
+
+`define A2S 32'd117
+`define B2  32'd123
+
+`define C3  32'd131
+`define C3S 32'd139
+`define D3F 32'd139
+`define D3  32'd147
+`define D3S 32'd156
+`define E3F 32'd156
+`define E3  32'd165
+`define F3  32'd175
+`define F3S 32'd185
+`define G3F 32'd185
+`define G3  32'd196
+`define G3S 32'd208
+`define A3F 32'd208
+`define A3  32'd220
+`define A3S 32'd233
+`define B3F 32'd233
+`define B3  32'd247
+
+`define C4  32'd262
+`define C4S 32'd277
+`define D4F 32'd277
+`define D4  32'd294
+`define D4S 32'd311
+`define E4F 32'd311
+`define E4  32'd330
+`define F4  32'd349
+`define F4S 32'd370
+`define G4F 32'd370
+`define G4  32'd392
+`define G4S 32'd415
+`define A4F 32'd415
+`define A4  32'd440
+`define A4S 32'd466
+`define B4F 32'd466
+`define B4  32'd494
+
+`define C5  32'd523
+`define C5S 32'd554
+`define D5F 32'd554
+`define D5  32'd587
+`define D5S 32'd622
+`define E5F 32'd622
+`define E5  32'd659
+`define F5  32'd698
+`define F5S 32'd740
+`define G5F 32'd740
+`define G5  32'd784
+`define G5S 32'd831
+`define A5F 32'd831
+`define A5  32'd880
+`define A5S 32'd932
+`define B5F 32'd932
+`define B5  32'd988
+
+`define KEY_1 9'h016
+`define KEY_2 9'h01E
+`define KEY_3 9'h026
+`define KEY_4 9'h025
+`define KEY_5 9'h02E
+`define KEY_6 9'h036
+`define KEY_7 9'h03D
+`define KEY_8 9'h03E
+`define KEY_9 9'h046
+`define KEY_0 9'h045
+`define KEY_Q 9'h015
+`define KEY_W 9'h01D
+`define KEY_E 9'h024
+`define KEY_R 9'h02D
+`define KEY_T 9'h02C
+`define KEY_Y 9'h035
+`define KEY_U 9'h03C
+`define KEY_I 9'h043
+`define KEY_O 9'h044
+`define KEY_P 9'h04D
+`define KEY_A 9'h01C
+`define KEY_S 9'h01B
+`define KEY_D 9'h023
+`define KEY_F 9'h02B
+`define KEY_G 9'h034
+`define KEY_H 9'h033
+`define KEY_J 9'h03B
+`define KEY_K 9'h042
+`define KEY_L 9'h043
+`define KEY_Z 9'h01A
+`define KEY_X 9'h022
+`define KEY_C 9'h021
+`define KEY_V 9'h02A
+`define KEY_B 9'h032
+`define KEY_N 9'h031
+`define KEY_M 9'h03A
+`define KEY_LB 9'h041
+`define KEY_RB 9'h049
+
+`define KEY_1R 10'h116
+`define KEY_2R 10'h11E
+`define KEY_3R 10'h126
+`define KEY_4R 10'h125
+`define KEY_5R 10'h12E
+`define KEY_6R 10'h136
+`define KEY_7R 10'h13D
+`define KEY_8R 10'h13E
+`define KEY_9R 10'h146
+`define KEY_0R 10'h145
+`define KEY_QR 10'h115
+`define KEY_WR 10'h11D
+`define KEY_ER 10'h124
+`define KEY_RR 10'h12D
+`define KEY_TR 10'h12C
+`define KEY_YR 10'h135
+`define KEY_UR 10'h13C
+`define KEY_IR 10'h143
+`define KEY_OR 10'h144
+`define KEY_PR 10'h14D
+`define KEY_AR 10'h11C
+`define KEY_SR 10'h11B
+`define KEY_DR 10'h123
+`define KEY_FR 10'h12B
+`define KEY_GR 10'h134
+`define KEY_HR 10'h133
+`define KEY_JR 10'h13B
+`define KEY_KR 10'h142
+`define KEY_LR 10'h143
+`define KEY_ZR 10'h11A
+`define KEY_XR 10'h122
+`define KEY_CR 10'h121
+`define KEY_VR 10'h12A
+`define KEY_BR 10'h132
+`define KEY_NR 10'h131
+`define KEY_MR 10'h13A
+`define KEY_LBR 10'h141
+`define KEY_RBR 10'h149
 
 module Music (
-	input [7:0] ibeatNum,
-	input en,
+	input [8:0] ibeatNum,
 	output reg [31:0] tone
 );
 
-always @(*) begin
-	if(en==0)begin
-	case(ibeatNum)
-	8'd0 : tone = `NM0;	
-    8'd1 : tone = `NM0;
-    8'd2 : tone = `NMC;
-    8'd3 : tone = `NM0;
-    8'd4 : tone = `NMC;
-    8'd5 : tone = `NM0;
-    8'd6 : tone = `NMC;
-    8'd7 : tone = `NM0;
-           
-    8'd8 : tone = `NMD;
-    8'd9 : tone = `NMD;
-    8'd10 :tone = `NMG;
-    8'd11 :tone = `NMG;
-    8'd12 :tone = `NMFs;
-    8'd13 :tone = `NMFs;
-    8'd14 :tone = `NMEs;
-    8'd15 :tone = `NMEs;
-////////////////////////////////////////
-           
-    8'd16 :tone = `NMEs;
-    8'd17 :tone = `NMEs;
-    8'd18 :tone = `NMEs;
-    8'd19 :tone = `NMEs;
-    8'd20 :tone = `NMFs;
-    8'd21 :tone = `NMFs;
-    8'd22 :tone = `NMEs;
-    8'd23 :tone = `NMEs;
-           
-    8'd24 :tone = `NMEs;
-    8'd25 :tone = `NM0;
-    8'd26 :tone = `NMDs;
-    8'd27 :tone = `NMDs;
-    8'd28 :tone = `NMDs;
-    8'd29 :tone = `NMDs;
-    8'd30 :tone = `NMCs;
-    8'd31 :tone = `NMCs;
-///////////////////////////////////
-           
-    8'd32 :tone = `NMCs;
-    8'd33 :tone = `NMCs;
-    8'd34 :tone = `NMCs;
-    8'd35 :tone = `NMCs;
-    8'd36 :tone = `NMDs;
-    8'd37 :tone = `NMDs;
-    8'd38 :tone = `NMEs;
-    8'd39 :tone = `NMEs;
-           
-    8'd40 :tone = `NMEs;
-    8'd41 :tone = `NMEs;
-    8'd42 :tone = `NMCs;
-    8'd43 :tone = `NMCs;
-    8'd44 :tone = `NMCs;
-    8'd45 :tone = `NMCs;
-    8'd46 :tone = `NMA;
-    8'd47 :tone = `NMA;
-/////////////////////////////
-                  
-    8'd48 :tone = `NMA;
-    8'd49 :tone = `NMA;
-    8'd50 :tone = `NMCs;
-    8'd51 :tone = `NMCs;
-    8'd52 :tone = `NMGs;
-    8'd53 :tone = `NMGs;
-    8'd54 :tone = `NMGs;
-    8'd55 :tone = `NMGs;
-                  
-    8'd56 :tone = `NMCs;
-    8'd57 :tone = `NMCs;
-    8'd58 :tone = `NMEs;
-    8'd59 :tone = `NMEs;
-    8'd60 :tone = `NMEs;
-    8'd61 :tone = `NMEs;
-    8'd62 :tone = `NMEs;
-    8'd63 :tone = `NMEs;
-///////////////////////////////
-                  
-    8'd64 :tone = `NMEs;
-    8'd65 :tone = `NMDs;
-    8'd66 :tone = `NMDs;
-    8'd67 :tone = `NMCs;
-    8'd68 :tone = `NMCs;
-    8'd69 :tone = `NMCs;
-    8'd70 :tone = `NMA;
-    8'd71 :tone = `NMA;
-                  
-    8'd72 :tone = `NMG;
-    8'd73 :tone = `NMG;
-    8'd74 :tone = `NMFs;
-    8'd75 :tone = `NMFs;
-    8'd76 :tone = `NMEs;
-    8'd77 :tone = `NMEs;
-    8'd78 :tone = `NMEs;
-    8'd79 :tone = `NMEs;
-/////////////////////////////
-                  
-    8'd80 :tone = `NMEs;
-    8'd81 :tone = `NMEs;
-    8'd82 :tone = `NMFs;
-    8'd83 :tone = `NMFs;
-    8'd84 :tone = `NMEs;
-    8'd85 :tone = `NMEs;
-    8'd86 :tone = `NMEs;
-    8'd87 :tone = `NMEs;
-                  
-    8'd88 :tone = `NMDs;
-    8'd89 :tone = `NMDs;
-    8'd90 :tone = `NMDs;
-    8'd91 :tone = `NMDs;
-    8'd92 :tone = `NMCs;
-    8'd93 :tone = `NMCs;
-    8'd94 :tone = `NMCs;
-    8'd95 :tone = `NMCs;
-///////////////////////////////
-                  
-    8'd96 :tone =  `NMCs;
-    8'd97 :tone =  `NMCs;
-    8'd98 :tone =  `NMDs;
-    8'd99 :tone =  `NMDs;
-    8'd100 :tone = `NMEs;
-    8'd101 :tone = `NMEs;
-    8'd102 :tone = `NMEs;
-    8'd103 :tone = `NMEs; 
-                   
-    8'd104 :tone = `NMAs;
-    8'd105 :tone = `NMAs;
-    8'd106 :tone = `NMAs;
-    8'd107 :tone = `NMAs;
-    8'd108 :tone = `NMAs;
-    8'd109 :tone = `NMAs;
-    8'd110 :tone = `NMEs;
-    8'd111 :tone = `NMEs;
-///////////////:// ////////////
-                   
-    8'd112 :tone = `NMEs;
-    8'd113 :tone = `NMEs;
-    8'd114 :tone = `NMA;
-    8'd115 :tone = `NMA;
-    8'd116 :tone = `NMCs;
-    8'd117 :tone = `NMCs;
-    8'd118 :tone = `NMCs;
-    8'd119 :tone = `NMCs; 
-                   
-    8'd120 :tone = `NMDs;
-    8'd121 :tone = `NMDs;
-    8'd122 :tone = `NMDs;
-    8'd123 :tone = `NMDs;
-    8'd124 :tone = `NMCs;
-    8'd125 :tone = `NMCs;
-    8'd126 :tone = `NMCs;
-    8'd127 :tone = `NM0;
-///////////////////////////////////////////////////
-	default : tone = `NM0;
-	endcase
-	end
-	else begin
-		tone = `NM0;
-	end
-end
+    always @* begin
+        case (ibeatNum) 
+        `KEY_1: tone = `A3S;
+        `KEY_3: tone = `C4S;
+        `KEY_4: tone = `D4S;
+        `KEY_6: tone = `F4S;
+        `KEY_7: tone = `G4S;
+        `KEY_8: tone = `A4S;
+        `KEY_0: tone = `C5S;
+        `KEY_Q: tone = `B3;
+        `KEY_W: tone = `C4;
+        `KEY_E: tone = `D4;
+        `KEY_R: tone = `E4;
+        `KEY_T: tone = `F4;
+        `KEY_Y: tone = `G4;
+        `KEY_U: tone = `A4;
+        `KEY_I: tone = `B4;
+        `KEY_O: tone = `C5;
+        `KEY_P: tone = `D5;
+
+        `KEY_A: tone = `A2S;
+        `KEY_D: tone = `C3S;
+        `KEY_F: tone = `D3S;
+        `KEY_H: tone = `F3S;
+        `KEY_J: tone = `G3S;
+        `KEY_K: tone = `A3S;
+        `KEY_Z: tone = `B2;
+        `KEY_X: tone = `C3;
+        `KEY_C: tone = `D3;
+        `KEY_V: tone = `E3;
+        `KEY_B: tone = `F3;
+        `KEY_N: tone = `G3;
+        `KEY_M: tone = `A3;
+        `KEY_LB: tone = `B3;
+        `KEY_RB: tone = `C4;
+
+        default: tone = `M0;
+        endcase
+    end
+
 endmodule

@@ -28,11 +28,20 @@ module SevenSegment(
     					digit <= 4'b1101;
     				end
     			4'b1101 : begin
+					if(nums[11:8]==4'b0) begin
+						display_num <= 4'hF;
+					end else begin
 						display_num <= nums[11:8];
+					end
 						digit <= 4'b1011;
 					end
     			4'b1011 : begin
+					if(nums[15:12]==4'b0) begin
+						display_num <= 4'hF;
+					end else begin
 						display_num <= nums[15:12];
+					end
+						
 						digit <= 4'b0111;
 					end
     			4'b0111 : begin
@@ -49,7 +58,7 @@ module SevenSegment(
     
     always @ (*) begin
     	case (display_num)
-    		0 : display = 7'b1000000;	//0000
+    		0 : display = 7'b1000000;	//0000 D
 			1 : display = 7'b1111001;   //0001                                                
 			2 : display = 7'b0100100;   //0010                                                
 			3 : display = 7'b0110000;   //0011                                             
@@ -57,8 +66,13 @@ module SevenSegment(
 			5 : display = 7'b0010010;   //0101                                               
 			6 : display = 7'b0000010;   //0110
 			7 : display = 7'b1111000;   //0111
-			8 : display = 7'b0000000;   //1000
+			8 : display = 7'b0000000;   //1000 B
 			9 : display = 7'b0010000;	//1001
+			10: display = 7'b0001000;	//A
+			11:	display = 7'b1000110;	//C
+			12: display = 7'b0000110;	//E
+			13: display = 7'b0001110;	//F
+			14: display = 7'b1000110;	//G
 			default : display = 7'b1111111;
     	endcase
     end

@@ -1,3 +1,18 @@
+module Debounce (pb_d, pb, clk);
+    output pb_d; // signal of a pushbutton after being debounced
+    input pb; // signal from a pushbutton
+    input clk;
+    
+    reg [3:0] DFF; // use shift_reg to filter pushbutton bounce
+    
+    always @(posedge clk) begin
+        DFF[3:1] <= DFF[2:0];
+        DFF[0] <= pb;
+    end
+    
+    assign pb_d = ((DFF == 4'b1111) ? 1'b1 : 1'b0);
+endmodule
+
 module OnePulse (
 	output reg signal_single_pulse,
 	input wire signal,
