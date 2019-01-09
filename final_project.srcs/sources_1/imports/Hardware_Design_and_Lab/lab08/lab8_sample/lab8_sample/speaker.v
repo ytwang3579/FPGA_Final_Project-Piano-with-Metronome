@@ -41,11 +41,13 @@ output audio_sdin; // serial audio data input
 
 // Declare internal nodes
 wire [15:0] audio_in_left, audio_in_right;
-wire [9:0] ibeatNum;
-wire [31:0] freq;
+wire [8:0] ibeatNum, ibeatNum2;
+wire [31:0] freq, freq2;
 wire [21:0] freq_out;
 wire clkDiv23;
-wire real_mute;
+wire valid;
+wire [511:0] key_down;
+wire [4:0] outcnt;
 
 clock_divider #(.n(24)) clock_23(
   .clk(clk),
@@ -56,13 +58,18 @@ PlayerCtrl playerCtrl_00 (
     .clk(clk),
     .rst(rst),
     .ibeat(ibeatNum),
+    .key_down(key_down),
     .PS2_DATA(PS2_DATA),
     .PS2_CLK(PS2_CLK)
 );
 
 Music music00 ( 
-    .ibeatNum(ibeatNum),
-    .tone(freq)
+    .key_down(key_down),
+    .tone(freq),
+    .rst(rst),
+    .clk(clk),
+    .cnt(outcnt),
+    .valid(valid)
 );
 
 assign freq_out = 50000000/freq;
@@ -74,7 +81,9 @@ note_gen Ung(
   .rst(rst), // active high reset
   .note_div(freq_out), // div for note generation
   .audio_left(audio_in_left), // left sound audio
-  .audio_right(audio_in_right) // right sound audio
+  .audio_right(audio_in_right), // right sound audio
+  .cnt(outcnt),
+  .valid(valid)
 );
 
 // Speaker controllor

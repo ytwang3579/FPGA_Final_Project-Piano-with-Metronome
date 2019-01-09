@@ -101,13 +101,14 @@ module PlayerCtrl (
 	input rst,
 	inout PS2_DATA,
 	inout PS2_CLK,
-	output reg [9:0] ibeat
+	output reg [8:0] ibeat,
+	output [511:0] key_down
 );
 	reg [15:0] nums;
 	reg [4:0] key_num;
 	reg [9:0] last_key;
 	
-	wire [511:0] key_down;
+	//wire [511:0] key_down;
 	wire [8:0] last_change;
 	wire been_ready;
 

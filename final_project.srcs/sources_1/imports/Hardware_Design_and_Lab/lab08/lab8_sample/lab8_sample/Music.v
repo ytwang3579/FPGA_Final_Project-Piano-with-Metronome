@@ -116,85 +116,306 @@
 `define KEY_LB 9'h041
 `define KEY_RB 9'h049
 
-`define KEY_1R 10'h116
-`define KEY_2R 10'h11E
-`define KEY_3R 10'h126
-`define KEY_4R 10'h125
-`define KEY_5R 10'h12E
-`define KEY_6R 10'h136
-`define KEY_7R 10'h13D
-`define KEY_8R 10'h13E
-`define KEY_9R 10'h146
-`define KEY_0R 10'h145
-`define KEY_QR 10'h115
-`define KEY_WR 10'h11D
-`define KEY_ER 10'h124
-`define KEY_RR 10'h12D
-`define KEY_TR 10'h12C
-`define KEY_YR 10'h135
-`define KEY_UR 10'h13C
-`define KEY_IR 10'h143
-`define KEY_OR 10'h144
-`define KEY_PR 10'h14D
-`define KEY_AR 10'h11C
-`define KEY_SR 10'h11B
-`define KEY_DR 10'h123
-`define KEY_FR 10'h12B
-`define KEY_GR 10'h134
-`define KEY_HR 10'h133
-`define KEY_JR 10'h13B
-`define KEY_KR 10'h142
-`define KEY_LR 10'h143
-`define KEY_ZR 10'h11A
-`define KEY_XR 10'h122
-`define KEY_CR 10'h121
-`define KEY_VR 10'h12A
-`define KEY_BR 10'h132
-`define KEY_NR 10'h131
-`define KEY_MR 10'h13A
-`define KEY_LBR 10'h141
-`define KEY_RBR 10'h149
-
 module Music (
-	input [8:0] ibeatNum,
-	output reg [31:0] tone
+	input [511:0] key_down,
+    input rst,
+    input clk,
+	output reg [31:0] tone,
+    output reg [4:0] cnt,
+    output reg valid
 );
+    reg [8:0] ibeatNum, next_ibeatNum;
+    reg [4:0] next_cnt;
+
+    always @(posedge clk, posedge rst) begin
+        if(rst==1'b1) begin
+            ibeatNum <= 9'b0;
+            cnt <= 5'd0;
+        end else begin
+            ibeatNum <= next_ibeatNum;
+            cnt <= next_cnt;
+        end
+    end
+    
+    always @* begin
+        if(ibeatNum==`KEY_1) begin
+            valid <= 1'b1;
+        end else begin
+            valid <= 1'b0;
+        end
+    end
 
     always @* begin
-        case (ibeatNum) 
-        `KEY_1: tone = `A3S;
-        `KEY_3: tone = `C4S;
-        `KEY_4: tone = `D4S;
-        `KEY_6: tone = `F4S;
-        `KEY_7: tone = `G4S;
-        `KEY_8: tone = `A4S;
-        `KEY_0: tone = `C5S;
-        `KEY_Q: tone = `B3;
-        `KEY_W: tone = `C4;
-        `KEY_E: tone = `D4;
-        `KEY_R: tone = `E4;
-        `KEY_T: tone = `F4;
-        `KEY_Y: tone = `G4;
-        `KEY_U: tone = `A4;
-        `KEY_I: tone = `B4;
-        `KEY_O: tone = `C5;
-        `KEY_P: tone = `D5;
+        case (ibeatNum)
+        `KEY_1: next_ibeatNum = `KEY_3;
+        `KEY_3: next_ibeatNum = `KEY_4;
+        `KEY_4: next_ibeatNum = `KEY_6;
+        `KEY_6: next_ibeatNum = `KEY_7;
+        `KEY_7: next_ibeatNum = `KEY_8;
+        `KEY_8: next_ibeatNum = `KEY_0;
+        `KEY_0: next_ibeatNum = `KEY_Q;
+        `KEY_Q: next_ibeatNum = `KEY_W;
+        `KEY_W: next_ibeatNum = `KEY_E;
+        `KEY_E: next_ibeatNum = `KEY_R;
+        `KEY_R: next_ibeatNum = `KEY_T;
+        `KEY_T: next_ibeatNum = `KEY_Y;
+        `KEY_Y: next_ibeatNum = `KEY_U;
+        `KEY_U: next_ibeatNum = `KEY_I;
+        `KEY_I: next_ibeatNum = `KEY_O;
+        `KEY_O: next_ibeatNum = `KEY_P;
+        `KEY_P: next_ibeatNum = `KEY_A;
 
-        `KEY_A: tone = `A2S;
-        `KEY_D: tone = `C3S;
-        `KEY_F: tone = `D3S;
-        `KEY_H: tone = `F3S;
-        `KEY_J: tone = `G3S;
-        `KEY_K: tone = `A3S;
-        `KEY_Z: tone = `B2;
-        `KEY_X: tone = `C3;
-        `KEY_C: tone = `D3;
-        `KEY_V: tone = `E3;
-        `KEY_B: tone = `F3;
-        `KEY_N: tone = `G3;
-        `KEY_M: tone = `A3;
-        `KEY_LB: tone = `B3;
-        `KEY_RB: tone = `C4;
+        `KEY_A: next_ibeatNum = `KEY_S;
+        `KEY_D: next_ibeatNum = `KEY_F;
+        `KEY_F: next_ibeatNum = `KEY_H;
+        `KEY_H: next_ibeatNum = `KEY_J;
+        `KEY_J: next_ibeatNum = `KEY_K;
+        `KEY_K: next_ibeatNum = `KEY_Z;
+        `KEY_Z: next_ibeatNum = `KEY_X;
+        `KEY_X: next_ibeatNum = `KEY_C;
+        `KEY_C: next_ibeatNum = `KEY_V;
+        `KEY_V: next_ibeatNum = `KEY_B;
+        `KEY_B: next_ibeatNum = `KEY_N;
+        `KEY_N: next_ibeatNum = `KEY_M;
+        `KEY_M: next_ibeatNum = `KEY_LB;
+        `KEY_LB: next_ibeatNum = `KEY_RB;
+        `KEY_RB: next_ibeatNum = `KEY_1;
+
+        default: next_ibeatNum = `KEY_1;
+        endcase
+    end
+
+
+    always @* begin
+        next_cnt = cnt;
+        case (ibeatNum) 
+        `KEY_1:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = 5'd1;
+                tone = `A3S;
+            end else begin
+                next_cnt = 5'd0;
+            end
+        end
+        `KEY_3:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `C4S;
+            end
+        end
+        `KEY_4:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `D4S;
+            end
+        end
+        `KEY_6:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `F4S;
+            end
+        end
+        `KEY_7:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `G4S;
+            end
+        end
+        `KEY_8:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `A4S;
+            end
+        end
+        `KEY_0:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `C5S;
+            end
+        end
+        `KEY_Q:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `B3;
+            end
+        end
+        `KEY_W:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `C4;
+            end
+        end
+        `KEY_E:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `D4;
+            end
+        end
+        `KEY_R:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `E4;
+            end
+        end
+        `KEY_T:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `F4;
+            end
+        end
+        `KEY_Y:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `G4;
+            end
+        end
+        `KEY_U:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `A4;
+            end
+        end
+        `KEY_I:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `B4;
+            end
+        end
+        `KEY_O:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `C5;
+            end
+        end
+        `KEY_P:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `D5;
+            end
+        end
+
+        `KEY_A:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `A2S;
+            end
+        end
+        `KEY_D:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `C3S;
+            end
+        end
+        `KEY_F:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `D3S;
+            end
+        end
+        `KEY_H:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `F3S;
+            end
+        end
+        `KEY_J:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `G3S;
+            end
+        end
+        `KEY_K:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `A3S;
+            end
+        end
+        `KEY_Z:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `B2;
+            end
+        end
+        `KEY_X:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `C3;
+            end
+        end
+        `KEY_C:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `D3;
+            end
+        end
+        `KEY_V:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `E3;
+            end
+        end
+        `KEY_B:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `F3;
+            end
+        end
+        `KEY_N:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `G3;
+            end
+        end
+        `KEY_M:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `A3;
+            end
+        end
+        `KEY_LB:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `B3;
+            end
+        end
+        `KEY_RB:
+        begin
+            if(key_down[ibeatNum]==1'b1) begin
+                next_cnt = cnt + 1;
+                tone = `C4;
+            end
+        end
 
         default: tone = `M0;
         endcase
