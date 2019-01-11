@@ -26,7 +26,12 @@ module speaker(
   audio_sck, // serial clock
   audio_sdin, // serial audio data input
   PS2_DATA,
-  PS2_CLK
+  PS2_CLK,
+  m1,
+  m2,
+  state1,
+  state2,
+  mute
 );
 
 // I/O declaration
@@ -34,10 +39,15 @@ input clk;  // clock from the crystal
 input rst;  // active high reset
 inout PS2_DATA;
 inout PS2_CLK;
+input m1;
+input m2;
+input mute;
 output audio_mclk; // master clock
 output audio_lrck; // left-right clock
 output audio_sck; // serial clock
 output audio_sdin; // serial audio data input
+output [3:0] state1;
+output [3:0] state2;
 
 // Declare internal nodes
 wire [15:0] audio_in_left, audio_in_right;
@@ -45,7 +55,7 @@ wire [9:0] ibeatNum;
 wire [31:0] freq;
 wire [21:0] freq_out;
 wire clkDiv23;
-wire real_mute;
+
 
 clock_divider #(.n(24)) clock_23(
   .clk(clk),
@@ -57,12 +67,19 @@ PlayerCtrl playerCtrl_00 (
     .rst(rst),
     .ibeat(ibeatNum),
     .PS2_DATA(PS2_DATA),
-    .PS2_CLK(PS2_CLK)
+    .PS2_CLK(PS2_CLK),
+    .state1(state1),
+    .state2(state2)
 );
 
 Music music00 ( 
     .ibeatNum(ibeatNum),
-    .tone(freq)
+    .tone(freq),
+    .state1(state1),
+    .state2(state2),
+    .m1(m1),
+    .m2(m2),
+    .mute(mute)
 );
 
 assign freq_out = 50000000/freq;

@@ -11,9 +11,9 @@ module SevenSegment(
     
     always @ (posedge clk, posedge rst) begin
     	if (rst) begin
-    		clk_divider <= 15'b0;
+    		clk_divider <= 16'b0;
     	end else begin
-    		clk_divider <= clk_divider + 15'b1;
+    		clk_divider <= clk_divider + 16'b1;
     	end
     end
     
@@ -41,7 +41,6 @@ module SevenSegment(
 					end else begin
 						display_num <= nums[15:12];
 					end
-						
 						digit <= 4'b0111;
 					end
     			4'b0111 : begin

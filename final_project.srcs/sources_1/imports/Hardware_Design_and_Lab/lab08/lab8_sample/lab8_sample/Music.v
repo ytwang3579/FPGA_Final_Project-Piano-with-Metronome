@@ -157,47 +157,67 @@
 
 module Music (
 	input [8:0] ibeatNum,
+    input [3:0] state1,
+    input [3:0] state2,
+    input m1,
+    input m2,
+    input mute,
 	output reg [31:0] tone
 );
 
+    parameter [31:0] SOUND [0:37] = {
+        `A2S, `B2, `C3, `C3S, `D3, `D3S, `E3, `F3, `F3S, `G3,
+        `G3S, `A3, `A3S, `B3, `C4, `C4S, `D4, `D4S, `E4, `F4,
+        `F4S, `G4, `G4S, `A4, `A4S, `B4, `C5, `C5S, `D5, `D5S,
+        `E5, `F5, `F5S, `G5, `G5S, `A5, `A5S, `B5
+    };
+/*
+    wire [31:0] diff1 = (state1 << 3);
+    wire [31:0] diff2 = (state2 << 3);
+*/
     always @* begin
+        
         case (ibeatNum) 
-        `KEY_1: tone = `A3S;
-        `KEY_3: tone = `C4S;
-        `KEY_4: tone = `D4S;
-        `KEY_6: tone = `F4S;
-        `KEY_7: tone = `G4S;
-        `KEY_8: tone = `A4S;
-        `KEY_0: tone = `C5S;
-        `KEY_Q: tone = `B3;
-        `KEY_W: tone = `C4;
-        `KEY_E: tone = `D4;
-        `KEY_R: tone = `E4;
-        `KEY_T: tone = `F4;
-        `KEY_Y: tone = `G4;
-        `KEY_U: tone = `A4;
-        `KEY_I: tone = `B4;
-        `KEY_O: tone = `C5;
-        `KEY_P: tone = `D5;
+        `KEY_1: tone = SOUND[12-state1];
+        `KEY_3: tone = SOUND[15-state1];
+        `KEY_4: tone = SOUND[17-state1];
+        `KEY_6: tone = SOUND[20-state1];
+        `KEY_7: tone = SOUND[22-state1];
+        `KEY_8: tone = SOUND[24-state1];
+        `KEY_0: tone = SOUND[27-state1];
+        `KEY_Q: tone = SOUND[13-state1];
+        `KEY_W: tone = SOUND[14-state1];
+        `KEY_E: tone = SOUND[16-state1];
+        `KEY_R: tone = SOUND[18-state1];
+        `KEY_T: tone = SOUND[19-state1];
+        `KEY_Y: tone = SOUND[21-state1];
+        `KEY_U: tone = SOUND[23-state1];
+        `KEY_I: tone = SOUND[25-state1];
+        `KEY_O: tone = SOUND[26-state1];
+        `KEY_P: tone = SOUND[28-state1];
 
-        `KEY_A: tone = `A2S;
-        `KEY_D: tone = `C3S;
-        `KEY_F: tone = `D3S;
-        `KEY_H: tone = `F3S;
-        `KEY_J: tone = `G3S;
-        `KEY_K: tone = `A3S;
-        `KEY_Z: tone = `B2;
-        `KEY_X: tone = `C3;
-        `KEY_C: tone = `D3;
-        `KEY_V: tone = `E3;
-        `KEY_B: tone = `F3;
-        `KEY_N: tone = `G3;
-        `KEY_M: tone = `A3;
-        `KEY_LB: tone = `B3;
-        `KEY_RB: tone = `C4;
+        `KEY_A: tone = SOUND[state2];
+        `KEY_D: tone = SOUND[3+state2];
+        `KEY_F: tone = SOUND[5+state2];
+        `KEY_H: tone = SOUND[8+state2];
+        `KEY_J: tone = SOUND[10+state2];
+        `KEY_K: tone = SOUND[12+state2];
+        `KEY_Z: tone = SOUND[1+state2];
+        `KEY_X: tone = SOUND[2+state2];
+        `KEY_C: tone = SOUND[4+state2];
+        `KEY_V: tone = SOUND[6+state2];
+        `KEY_B: tone = SOUND[7+state2];
+        `KEY_N: tone = SOUND[9+state2];
+        `KEY_M: tone = SOUND[11+state2];
+        `KEY_LB: tone = SOUND[13+state2];
+        `KEY_RB: tone = SOUND[14+state2];
 
         default: tone = `M0;
         endcase
+
+        if((m1|m2)&(~mute)) begin
+            tone = `A5;
+        end
     end
 
 endmodule

@@ -7,3 +7,6 @@ final_project.sim/*
 *.xpr
 *.xdc
 *ip
+
+# For Presentation
+*.pptx

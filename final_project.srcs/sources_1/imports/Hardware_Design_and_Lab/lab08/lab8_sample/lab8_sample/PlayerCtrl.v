@@ -101,7 +101,9 @@ module PlayerCtrl (
 	input rst,
 	inout PS2_DATA,
 	inout PS2_CLK,
-	output reg [9:0] ibeat
+	output reg [8:0] ibeat,
+	output reg [3:0] state1,
+	output reg [3:0] state2
 );
 	reg [15:0] nums;
 	reg [4:0] key_num;
@@ -125,15 +127,44 @@ module PlayerCtrl (
 		if (rst) begin
 			nums <= 16'b0;
 			ibeat <= 10'b0;
+			state1 <= 3'b0;
+			state2 <= 3'b0;
 		end else begin
 			nums <= nums;
-			
 			if (been_ready && key_down[last_change]==1'b1) begin
-				ibeat <= last_change;
+				if(last_change==9'h072) begin
+					if(state1[3]==0) state1 <= state1 + 1;
+					else state1 <= state1;
+					state2 <= state2;
+					ibeat <= ibeat;
+				end else if(last_change==9'h075) begin
+					if(state1 != 4'b0) state1 <= state1 - 1;
+					else state1 <= state1;
+					state2 <= state2;
+					ibeat <= ibeat;
+				end else if(last_change==9'h074) begin
+					if(state2[3]==0) state2 <= state2 + 1;
+					else state2 <= state2;
+					state1 <= state1;
+					ibeat <= ibeat;
+				end else if(last_change==9'h06B) begin
+					if(state2 != 4'b0) state2 <= state2 - 1;
+					else state2 <= state2;
+					state1 <= state1;
+					ibeat <= ibeat;
+				end else begin
+					state1 <= state1;
+					state2 <= state2;
+					ibeat <= last_change;
+				end
 			end else if (been_ready && key_down[last_change]==1'b0) begin
 				ibeat <= `M0;
+				state1 <= state1;
+				state2 <= state2;
 			end else begin
 				ibeat <= ibeat;
+				state1 <= state1;
+				state2 <= state2;
 			end
 		end
 	end
